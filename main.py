@@ -2,12 +2,9 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-# LINEの設定（GitHub Actionsのシークレットから読み込み）
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_USER_ID = os.environ.get("LINE_USER_ID")
-# スクレイピングAPIのキーを読み込み
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
-
 
 def send_line_message(message):
     print(f"DEBUG: TOKENの長さ = {len(LINE_CHANNEL_ACCESS_TOKEN) if LINE_CHANNEL_ACCESS_TOKEN else 0}")
@@ -33,7 +30,6 @@ def send_line_message(message):
     else:
         print("LINE通知を送信しました。")
 
-
 def check_okuyami():
     target_url = "https://okuyamiran.net/okuyami/published/nagasaki/"
 
@@ -50,13 +46,11 @@ def check_okuyami():
         soup = BeautifulSoup(response.text, "html.parser")
         print("ScraperAPI経由でサイトの取得に成功しました。")
 
-        # LINE送信テスト
-        message = f"【長崎お悔やみチェッカー】\nサイトの取得テスト成功！"
+        message = "【長崎お悔やみチェッカー】\nサイトの取得テスト成功！"
         send_line_message(message)
 
     except Exception as e:
         print(f"エラーが発生しました: {e}")
-
 
 if __name__ == "__main__":
     check_okuyami()
