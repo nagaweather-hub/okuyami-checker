@@ -2,14 +2,17 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+# LINEの設定（GitHub Actionsのシークレットから読み込み）
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_USER_ID = os.environ.get("LINE_USER_ID")
+# スクレイピングAPIのキーを読み込み
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
 
-def send_line_message(message):
-    print(f"DEBUG: TOKENの長さ = {len(LINE_CHANNEL_ACCESS_TOKEN) if LINE_CHANNEL_ACCESS_TOKEN else 0}")
-    print(f"DEBUG: USER_IDの長さ = {len(LINE_USER_ID) if LINE_USER_ID else 0}")
+# ★ここに通知したい特定の苗字を登録してください（複数指定できます）
+TARGET_SURNAMES = ["山田", "佐藤", "馬場"]  # 例です。ご自身の目的に合わせて変更してください
 
+
+def send_line_message(message):
     if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_USER_ID:
         print("LINEの環境変数が設定されていません。")
         return
@@ -22,13 +25,11 @@ def send_line_message(message):
     data = {"to": LINE_USER_ID, "messages": [{"type": "text", "text": message}]}
 
     response = requests.post(url, headers=headers, json=data)
-    print(f"DEBUG: LINE APIレスポンスコード = {response.status_code}")
-    print(f"DEBUG: LINE APIレスポンス内容 = {response.text}")
-
     if response.status_code != 200:
         print(f"LINE通知の送信に失敗しました: {response.text}")
     else:
         print("LINE通知を送信しました。")
+
 
 def check_okuyami():
     target_url = "https://okuyamiran.net/okuyami/published/nagasaki/"
@@ -46,11 +47,28 @@ def check_okuyami():
         soup = BeautifulSoup(response.text, "html.parser")
         print("ScraperAPI経由でサイトの取得に成功しました。")
 
-        message = "【長崎お悔やみチェッカー】\nサイトの取得テスト成功！"
-        send_line_message(message)
+        # ページ全体のテキストを取得
+        page_text = soup.get_text()
+
+        # 指定した苗字が含まれているかチェック
+        found_matches = []
+        for surname in TARGET_SURNAMES:
+            if surname in page_text:
+                found_matches.append(surname)
+
+        if found_matches:
+            # ヒットした場合の通知
+            surnames_str = ", ".join(found_matches)
+            message = f"【お悔やみ情報通知】\n指定した苗字（{surnames_str}）が見つかりました。\n\n確認URL:\n{target_url}"
+            send_line_message(message)
+        else:
+            print("指定した苗字は現在掲載されていません。")
+            # ※普段は通知不要ですが、動作テストのために通知したい場合は下のコメントアウトを外してください
+            # send_line_message(f"【お悔やみチェッカー】巡回完了：指定の苗字はヒットしませんでした。")
 
     except Exception as e:
         print(f"エラーが発生しました: {e}")
+
 
 if __name__ == "__main__":
     check_okuyami()
