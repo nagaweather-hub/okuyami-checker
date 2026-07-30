@@ -10,6 +10,9 @@ SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
 
 
 def send_line_message(message):
+    print(f"DEBUG: TOKENの長さ = {len(LINE_CHANNEL_ACCESS_TOKEN) if LINE_CHANNEL_ACCESS_TOKEN else 0}")
+    print(f"DEBUG: USER_IDの長さ = {len(LINE_USER_ID) if LINE_USER_ID else 0}")
+
     if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_USER_ID:
         print("LINEの環境変数が設定されていません。")
         return
@@ -22,6 +25,9 @@ def send_line_message(message):
     data = {"to": LINE_USER_ID, "messages": [{"type": "text", "text": message}]}
 
     response = requests.post(url, headers=headers, json=data)
+    print(f"DEBUG: LINE APIレスポンスコード = {response.status_code}")
+    print(f"DEBUG: LINE APIレスポンス内容 = {response.text}")
+
     if response.status_code != 200:
         print(f"LINE通知の送信に失敗しました: {response.text}")
     else:
@@ -44,13 +50,12 @@ def check_okuyami():
         soup = BeautifulSoup(response.text, "html.parser")
         print("ScraperAPI経由でサイトの取得に成功しました。")
 
-        # 取得に成功したら必ずLINEを送るテスト
-        message = f"【長崎お悔やみチェッカー】\nサイトの取得に成功しました！\nURL: {target_url}"
+        # LINE送信テスト
+        message = f"【長崎お悔やみチェッカー】\nサイトの取得テスト成功！"
         send_line_message(message)
 
     except Exception as e:
         print(f"エラーが発生しました: {e}")
-        send_line_message(f"【エラー発生】お悔やみチェッカーでエラー: {e}")
 
 
 if __name__ == "__main__":
