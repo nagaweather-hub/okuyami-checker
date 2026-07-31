@@ -9,7 +9,7 @@ LINE_USER_ID = os.environ.get("LINE_USER_ID")
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
 
 # ★ここに通知したい特定の苗字を登録してください（複数指定できます）
-TARGET_SURNAMES = ["山田", "佐藤", "馬場"]  # 例です。ご自身の目的に合わせて変更してください
+TARGET_SURNAMES = ["山田", "佐藤", "馬場"]
 
 
 def send_line_message(message):
@@ -59,15 +59,19 @@ def check_okuyami():
         if found_matches:
             # ヒットした場合の通知
             surnames_str = ", ".join(found_matches)
-            message = f"【お悔やみ情報通知】\n指定した苗字（{surnames_str}）が見つかりました。\n\n確認URL:\n{target_url}"
+            message = f"【🚨 お悔やみ情報：ヒット通知】\n指定した苗字（{surnames_str}）が見つかりました！\n\n確認URL:\n{target_url}"
             send_line_message(message)
         else:
+            # ヒットしなかった場合でも通知する（動作確認用）
             print("指定した苗字は現在掲載されていません。")
-            # ※普段は通知不要ですが、動作テストのために通知したい場合は下のコメントアウトを外してください
-            # send_line_message(f"【お悔やみチェッカー】巡回完了：指定の苗字はヒットしませんでした。")
+            message = f"【お悔やみチェッカー】\n本日の巡回が完了しました。\n指定した苗字（{', '.join(TARGET_SURNAMES)}）の掲載はありませんでした。"
+            send_line_message(message)
 
     except Exception as e:
         print(f"エラーが発生しました: {e}")
+        send_line_message(
+            f"【お悔やみチェッカー エラー】\n処理中にエラーが発生しました: {e}"
+        )
 
 
 if __name__ == "__main__":
