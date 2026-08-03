@@ -47,7 +47,7 @@ def check_okuyami():
         soup = BeautifulSoup(response.text, "html.parser")
         print("ScraperAPI経由でサイトの取得に成功しました。")
 
-        # ページ全体のテキストを取得
+        # ページ全体のテキストを取得する
         page_text = soup.get_text()
 
         # 指定した苗字が含まれているかチェック
