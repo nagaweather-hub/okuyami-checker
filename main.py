@@ -8,7 +8,7 @@ LINE_USER_ID = os.environ.get("LINE_USER_ID")
 # スクレイピングAPIのキーを読み込み
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
 
-# ★ここに通知したい特定の苗字を登録してください（複数指定できます）
+# ★ここに通知したい特定の苗字を登録してください（複数指定できます。）
 TARGET_SURNAMES = ["辻田", "岡崎","寺坂"]
 
 
