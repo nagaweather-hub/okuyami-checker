@@ -2,8 +2,12 @@ name: Okuyami Line Notify
 
 on:
   schedule:
-    # 毎日 日本時間の朝10:00（UTC 1:00）に実行
-    - cron: '0 1 * * *'
+    # 日本時間 9:00（UTC 0:00）
+    - cron: '0 0 * * *'
+    # 日本時間 15:00（UTC 6:00）
+    - cron: '0 6 * * *'
+    # 日本時間 20:00（UTC 11:00）
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 jobs:
