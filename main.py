@@ -9,7 +9,7 @@ LINE_USER_ID = os.environ.get("LINE_USER_ID")
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY")
 
 # ★ここに通知したい特定の苗字を登録してください（複数指定できます。）
-TARGET_SURNAMES = ["辻田", "岡崎","寺坂"]
+TARGET_SURNAMES = ["辻田", "岡崎","田中"]
 
 
 def send_line_message(message):
