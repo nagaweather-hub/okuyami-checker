@@ -2,7 +2,7 @@ name: Okuyami Line Notify
 
 on:
   schedule:
-    # 日本時間 6:00（UTC 21:00）
+    # 日本時間 8:00（UTC 23:00）
     - cron: '0 21 * * *'
     # 日本時間 13:00（UTC 4:00）
     - cron: '0 4 * * *'
